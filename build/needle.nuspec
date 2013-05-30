@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>NeedleContainer</id> 
+    <version>0.1</version> 
+    <authors>Damian Schenkelman</authors>
+    <description>The Needle Container is a lightweight dependency injection container. It features a fluent API, asynchronous object resolution, and constructor and property injection.</description> 
+    <language>en-US</language>
+    <licenseUrl>https://github.com/dschenkelman//blob/dev/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/dschenkelman/needle</projectUrl>
+  </metadata> 
+  <files>
+    <file src="..\buildOutput\Needle.dll" target="lib\net45" />
+  </files>
+</package>
