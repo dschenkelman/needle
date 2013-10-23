@@ -80,7 +80,6 @@
     <Compile Include="Configuration\MappingConfigurationElementFixture.cs" />
     <Compile Include="Configuration\NeedleConfigurationFixture.cs" />
     <Compile Include="Container\NeedleContainerFluentFixture.cs" />
-    <Compile Include="Container\NeedleContainerAsyncFixture.cs" />
     <Compile Include="Container\NeedleContainerFixture.cs" />
     <Compile Include="Container\NeedleContainerFixtureBase.cs" />
     <Compile Include="Container\NeedleContainerGenericsFixture.cs" />

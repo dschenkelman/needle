@@ -1,4 +1,6 @@
-﻿namespace Needle.Tests.Builder
+﻿using Needle.Container;
+
+namespace Needle.Tests.Builder
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,7 +35,7 @@
         public void SettingConstrutorParametersReturnsNullFactoryMethod() 
         {
             var mockDependency = new Mock<Type>();
-            this.status.ConstructorDependenciesFactories = new Func<object>[] { () => new MockDependency() };
+            this.status.ConstructorDependenciesFactories = new Factory<object>[] { () => new MockDependency() };
             Assert.IsNull(this.status.FactoryMethod);
         }
 
@@ -49,7 +51,7 @@
         {
             var constructorDependency = new MockDependency();
 
-            this.status.ConstructorDependenciesFactories = new Func<object>[] { () => constructorDependency };
+            this.status.ConstructorDependenciesFactories = new Factory<object>[] { () => constructorDependency };
 
             this.status.ConstructorMethod = typeof(MockWithObjectDependency).GetConstructors()[0];
 
@@ -67,8 +69,8 @@
             var constructorDependency = new MockDependency();
             var propertyDependency = new MockDependency();
             
-            this.status.ConstructorDependenciesFactories = new Func<object>[] { () => constructorDependency };
-            Func<object> propertyFactory = new Func<object>(() => propertyDependency);
+            this.status.ConstructorDependenciesFactories = new Factory<object>[] { () => constructorDependency };
+            Factory<object> propertyFactory = () => propertyDependency;
             
             this.status.ConstructorMethod = typeof(MockWithPropertyAndConstructorDependency).GetConstructors()[0];
             this.status.AddDependencyPropertyFactory("PropertyDependency", propertyFactory);
@@ -85,9 +87,9 @@
         [TestMethod]
         public void CanAddFactoryForPropertyUsingPropertyName() 
         {
-            var factory = new Func<object>(() => new MockDependency());
+            var factory = new Factory<object>(() => new MockDependency());
             this.status.AddDependencyPropertyFactory("PropertyName", factory);
-            Func<object> obtainedFactory = this.status.GetDependencyPropertyFactory("PropertyName");
+            Factory<object> obtainedFactory = this.status.GetDependencyPropertyFactory("PropertyName");
 
             Assert.AreEqual(factory, obtainedFactory);
             

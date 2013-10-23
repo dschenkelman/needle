@@ -1,4 +1,6 @@
-﻿namespace Needle.Builder.Strategies
+﻿using System.Linq;
+
+namespace Needle.Builder.Strategies
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -7,11 +9,11 @@
 
     public class BuilderStrategyCollection : IBuilderStrategyCollection
     {
-        private readonly SortedList<BuildingStep, IBuilderStrategy> builderStrategies;
+        private readonly List<IBuilderStrategy> builderStrategies;
         
         public BuilderStrategyCollection()
         {
-            this.builderStrategies = new SortedList<BuildingStep, IBuilderStrategy>();
+            this.builderStrategies = new List<IBuilderStrategy>();
         }
 
         public int StrategyCount 
@@ -26,7 +28,14 @@
         {
             Guard.ThrowIfNullArgument(strategy, "strategy");
 
-            this.builderStrategies[strategy.BuildingStep] = strategy;
+            var existingStrategy = this.builderStrategies.FirstOrDefault(s => s.BuildingStep == strategy.BuildingStep);
+
+            if (existingStrategy != null)
+            {
+                this.builderStrategies.Remove(existingStrategy);
+            }
+
+            this.builderStrategies.Add(strategy);
 
             return this;
         }
@@ -35,20 +44,21 @@
         {
             Guard.ThrowIfNullArgument(strategy, "strategy");
             
-            this.builderStrategies.Remove(strategy.BuildingStep);
+            this.builderStrategies.Remove(strategy);
 
             return this;
         }
 
         public IBuilderStrategy GetStrategy(BuildingStep step) 
         {
-            return this.builderStrategies[step];
+            return this.builderStrategies.FirstOrDefault(s => s.BuildingStep == step);
         }
 
         #region IEnumerable Members
         public IEnumerator<IBuilderStrategy> GetEnumerator()
         {
-            return this.builderStrategies.Values.GetEnumerator();
+            this.builderStrategies.Sort((s1, s2) => s1.CompareTo(s2));
+            return this.builderStrategies.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

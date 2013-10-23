@@ -34,12 +34,12 @@
             this.Container.Map<TFrom>().To<TTo>().WithId(id).Commit();
         }
 
-        protected override void MapInContainer<TFrom, TTo>(string id, Func<TTo> factory)
+        protected override void MapInContainer<TFrom, TTo>(string id, Factory<TTo> factory)
         {
             this.Container.Map<TFrom>().To<TTo>().WithFactory(factory).WithId(id).Commit();
         }
 
-        protected override void MapInContainer<TFrom, TTo>(Func<TTo> factory)
+        protected override void MapInContainer<TFrom, TTo>(Factory<TTo> factory)
         {
             this.Container.Map<TFrom>().To<TTo>().WithFactory(factory).Commit();
         }

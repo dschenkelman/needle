@@ -31,7 +31,7 @@
             return this.InstantiateObjectWithConstructorDependencies(typeMapping, container);
         }
 
-        public void AddFactoryMethod(TypeMapping typeMapping, Func<object> factory)
+        public void AddFactoryMethod(TypeMapping typeMapping, Factory<object> factory)
         {
             this.factoryRegistry.AddFactory(typeMapping, factory);
         }

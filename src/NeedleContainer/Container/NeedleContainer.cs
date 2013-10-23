@@ -129,7 +129,7 @@
             return !((t.IsInterface || t.IsAbstract) && !t.IsGenericType);
         }
 
-        private void MapInternal(TypeMapping mapping, InstanceRegistration registration, Func<object> factory)
+        private void MapInternal(TypeMapping mapping, InstanceRegistration registration, Factory<object> factory)
         {
             this.CreateTypeMappingsForTypeIfNecessary(mapping.FromType);
 
@@ -165,12 +165,14 @@
         /// <param name="mapping">The mapping.</param>
         private void UpdateTypeMappingsForType(Type fromType, TypeMapping mapping)
         {
-            int index = this.typeMappings[fromType].FindIndex(tm => tm.Id == mapping.Id);
+            var mappingForType = this.typeMappings[fromType];
 
-            if (index != -1)
+            var existingMapping = mappingForType.SingleOrDefault(m => m.Id == mapping.Id);
+
+            if (existingMapping != null)
             {
                 // there is already a mapping for the type with the same name
-                this.typeMappings[fromType].RemoveAt(index);
+                this.typeMappings[fromType].Remove(existingMapping);
             }
          
             this.typeMappings[fromType].Add(mapping);
@@ -277,12 +279,12 @@
         private void StoreNamedInstanceInternal(Type mappedType, InstanceRegistration registration)
         {
             List<InstanceRegistration> instanceRegistrations = this.instanceMappings[mappedType];
-            int index = instanceRegistrations.FindIndex(r => registration.Id.Equals(r.Id));
+            var existingRegistration = instanceRegistrations.SingleOrDefault(r => registration.Id.Equals(r.Id));
 
-            if (index != -1)
+            if (existingRegistration != null)
             {
                 // there is already an instance registered with the same id
-                instanceRegistrations.RemoveAt(index);
+                instanceRegistrations.Remove(existingRegistration);
             }
             
             this.instanceMappings[mappedType].Add(registration);

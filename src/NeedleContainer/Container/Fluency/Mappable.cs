@@ -1,10 +1,6 @@
 ﻿namespace Needle.Container.Fluency
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     using Needle.Properties;
 
     internal class Mappable<T> : IMappable<T> where T : class
@@ -13,9 +9,9 @@
 
         private readonly InstanceRegistration registration;
 
-        private readonly Action<TypeMapping, InstanceRegistration, Func<object>> commitAction;
+        private readonly Action<TypeMapping, InstanceRegistration, Factory<object>> commitAction;
 
-        public Mappable(TypeMapping mapping, InstanceRegistration registration, Action<TypeMapping, InstanceRegistration, Func<object>> commitAction)
+        public Mappable(TypeMapping mapping, InstanceRegistration registration, Action<TypeMapping, InstanceRegistration, Factory<object>> commitAction)
         {
             this.mapping = mapping;
             this.registration = registration;
@@ -47,6 +43,9 @@
 
         private ICommittableIdentifiableLifetimeableFactoryConfigurable<TTo> CreateRegistrationProxy<TTo>() where TTo : class
         {
+
+            Factory<TTo> f = null;
+            Factory<object> g = f;
             return new MappingRegistrationProxy<TTo>(this.mapping, this.registration, this.commitAction);
         }
     }

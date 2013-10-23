@@ -73,7 +73,9 @@
             mockDependenciesStrategy.SetupGet<BuildingStep>(strategy => strategy.BuildingStep)
                 .Returns(BuildingStep.ConstructorDependenciesResolution);
 
-            var strategies = new IBuilderStrategy[] { mockConstructorStrategy.Object, mockDependenciesStrategy.Object };
+            mockDependenciesStrategy.Setup(s => s.CompareTo(mockConstructorStrategy.Object)).Returns(1).Verifiable();
+
+            var strategies = new[] { mockConstructorStrategy.Object, mockDependenciesStrategy.Object };
 
             this.collection.AddStrategy(mockDependenciesStrategy.Object);
             this.collection.AddStrategy(mockConstructorStrategy.Object);
@@ -84,6 +86,8 @@
                 Assert.AreSame(strategies[i], strategy);
                 i++;
             }
+
+            mockDependenciesStrategy.VerifyAll();
         }
 
         [TestMethod]

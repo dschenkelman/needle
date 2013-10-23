@@ -80,7 +80,7 @@
         {
             var mockBuildStatus = new Mock<IBuildStatus>();
             mockBuildStatus.SetupGet<Type>(status => status.TypeToBuild).Returns(typeof(IEnumerable<MockWithoutDependencies>));
-            mockBuildStatus.SetupProperty<Func<object>>(status => status.FactoryMethod);
+            mockBuildStatus.SetupProperty<Factory<object>>(status => status.FactoryMethod);
             var mockContainer = new Mock<INeedleContainer>();
             mockContainer.Setup(c => c.GetAll<MockWithoutDependencies>()).Returns(new MockWithoutDependencies[] { new MockWithoutDependencies(), new MockWithoutDependencies() });
 

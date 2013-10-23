@@ -676,11 +676,11 @@
             where TFrom : class
             where TTo : class, TFrom;
 
-        protected abstract void MapInContainer<TFrom, TTo>(string id, Func<TTo> factory) 
+        protected abstract void MapInContainer<TFrom, TTo>(string id, Factory<TTo> factory) 
             where TFrom : class
             where TTo : class, TFrom;
 
-        protected abstract void MapInContainer<TFrom, TTo>(Func<TTo> factory)
+        protected abstract void MapInContainer<TFrom, TTo>(Factory<TTo> factory)
             where TFrom : class
             where TTo : class, TFrom;
 

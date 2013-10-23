@@ -30,7 +30,7 @@
                 .ToArray();
         }
 
-        private static Func<object> ResolveDependency(ParameterInfo parameterInfo, INeedleContainer container)
+        private static Factory<object> ResolveDependency(ParameterInfo parameterInfo, INeedleContainer container)
         {
             string id = string.Empty;
             object[] attributes = parameterInfo.GetCustomAttributes(typeof(DependencyAttribute), false);
@@ -45,9 +45,9 @@
 
             Type underlyingType = parameterInfo.ParameterType;
             Type helperType = typeof(GetterHelper<>).MakeGenericType(underlyingType);
-            Type delegateType = typeof(Func<>).MakeGenericType(underlyingType);
+            Type delegateType = typeof(Factory<>).MakeGenericType(underlyingType);
             var getterHelper = Activator.CreateInstance(helperType, new object[] { container, id });
-            return Delegate.CreateDelegate(delegateType, getterHelper, helperType.GetMethod("Get")) as Func<object>;
+            return Delegate.CreateDelegate(delegateType, getterHelper, helperType.GetMethod("Get")) as Factory<object>;
         }
 
         private class GetterHelper<TItem>

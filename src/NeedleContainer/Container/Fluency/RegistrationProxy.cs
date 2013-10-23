@@ -49,7 +49,7 @@
             return this;
         }
 
-        public virtual ICommittableIdentifiableLifetimeable WithFactory(Func<T> factory)
+        public virtual ICommittableIdentifiableLifetimeable WithFactory(Factory<T> factory)
         {
             return this;
         }

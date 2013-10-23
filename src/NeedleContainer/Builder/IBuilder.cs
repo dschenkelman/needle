@@ -1,6 +1,5 @@
 ﻿namespace Needle.Builder
 {
-    using System;
     using Needle.Container;
 
     internal interface IBuilder
@@ -13,6 +12,6 @@
         /// <returns>The built object, with dependencies injected.</returns>
         object Build(TypeMapping typeMapping, INeedleContainer container);
 
-        void AddFactoryMethod(TypeMapping typeMapping, Func<object> factory);
+        void AddFactoryMethod(TypeMapping typeMapping, Factory<object> factory);
     }
 }

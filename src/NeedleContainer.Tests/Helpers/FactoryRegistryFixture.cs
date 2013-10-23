@@ -14,7 +14,7 @@
         {
             FactoryRegistry factoryRegistry = this.CreateFactoryRegistry();
 
-            Func<object> factory = () => new object();
+            Factory<object> factory = () => new object();
             TypeMapping typeMapping = new TypeMapping(
                 string.Empty, 
                 typeof(uint), 

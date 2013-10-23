@@ -4,18 +4,19 @@
 
     internal class MappingRegistrationProxy<T> : RegistrationProxy<T> where T : class
     {
-        private readonly Action<TypeMapping, InstanceRegistration, Func<object>> commitAction;
-        private Func<object> factoryMethod;
+        private readonly Action<TypeMapping, InstanceRegistration, Factory<object>> commitAction;
+        private Factory<object> factoryMethod;
 
         public MappingRegistrationProxy(
             TypeMapping mapping,
             InstanceRegistration registration,
-            Action<TypeMapping, InstanceRegistration, Func<object>> commitAction) : base(mapping, registration)
+            Action<TypeMapping, InstanceRegistration, Factory<object>> commitAction)
+            : base(mapping, registration)
         {
             this.commitAction = commitAction;
         }
 
-        public override ICommittableIdentifiableLifetimeable WithFactory(Func<T> factory)
+        public override ICommittableIdentifiableLifetimeable WithFactory(Factory<T> factory)
         {
             this.factoryMethod = factory;
 

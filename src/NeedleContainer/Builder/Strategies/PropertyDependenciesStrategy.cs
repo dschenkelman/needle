@@ -30,19 +30,19 @@
                     continue;
                 }
 
-                Func<object> dependencyFactory = ResolveDependency(container, property);
+                Factory<object> dependencyFactory = ResolveDependency(container, property);
                 buildStatus.AddDependencyPropertyFactory(property.Name, dependencyFactory);
             }   
         }
 
-        private static Func<object> ResolveDependency(INeedleContainer container, PropertyInfo property)
+        private static Factory<object> ResolveDependency(INeedleContainer container, PropertyInfo property)
         {
             DependencyAttribute attribute = (DependencyAttribute)property.GetCustomAttributes(typeof(DependencyAttribute), false)[0];
             Type underlyingType = property.PropertyType;
             Type helperType = typeof(GetterHelper<>).MakeGenericType(underlyingType);
-            Type delegateType = typeof(Func<>).MakeGenericType(underlyingType);
+            Type delegateType = typeof(Factory<>).MakeGenericType(underlyingType);
             var getterHelper = Activator.CreateInstance(helperType, new object[] { container, attribute.Id });
-            return Delegate.CreateDelegate(delegateType, getterHelper, helperType.GetMethod("Get")) as Func<object>;
+            return Delegate.CreateDelegate(delegateType, getterHelper, helperType.GetMethod("Get")) as Factory<object>;
         }
 
         private class GetterHelper<TItem>

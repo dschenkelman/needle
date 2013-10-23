@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-
     using Needle.Container.Fluency;
 
     public interface INeedleContainer : IHideObjectMethods
@@ -29,16 +27,6 @@
         /// <param name="id">The id with which the object to obtain was registered.</param>
         /// <returns>Returns an instance of the requested object based on the previous container configuration.</returns>
         object Get(Type type, string id);
-
-        /// <summary>Gets an object from the container asynchronously.</summary>
-        /// <typeparam name="T">The type of the object to get from the container.</typeparam>
-        /// <returns>Returns a promise of the requested object.</returns>
-        Task<T> GetAsync<T>();
-
-        /// <summary>Gets an object from the container asynchronously.</summary>
-        /// <param name="type">The type of the object to get from the container.</param>
-        /// <returns>Returns a promise of the requested object.</returns>
-        Task<object> GetAsync(Type type);
         
         /// <summary>Gets all registered instances in the container for a given type.</summary>
         /// <typeparam name="T">The type of the objects to get from the container.</typeparam>

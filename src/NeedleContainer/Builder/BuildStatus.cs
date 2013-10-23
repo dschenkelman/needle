@@ -1,4 +1,6 @@
-﻿namespace Needle.Builder
+﻿using Needle.Container;
+
+namespace Needle.Builder
 {
     using System;
     using System.Collections.Generic;
@@ -6,15 +8,15 @@
 
     public class BuildStatus : IBuildStatus
     {
-        private readonly Dictionary<string, Func<object>> dependencyPropertiesFactories;
+        private readonly Dictionary<string, Factory<object>> dependencyPropertiesFactories;
 
-        private Func<object> factoryMethod;
+        private Factory<object> factoryMethod;
 
         public BuildStatus(Type typeToBuild)
         {
             this.TypeToBuild = typeToBuild;
             this.BuildCompleted = false;
-            this.dependencyPropertiesFactories = new Dictionary<string, Func<object>>();
+            this.dependencyPropertiesFactories = new Dictionary<string, Factory<object>>();
         }
 
         /// <summary>
@@ -31,7 +33,7 @@
         /// Gets or sets the constructor dependencies factory methods.
         /// </summary>
         /// <value>The constructor dependencies.</value>
-        public Func<object>[] ConstructorDependenciesFactories
+        public Factory<object>[] ConstructorDependenciesFactories
         {
             get; 
             set;
@@ -41,7 +43,7 @@
         /// Gets the factory method to build the type from the <see cref="TypeToBuild"/> property.
         /// </summary>
         /// <value>The factory method.</value>
-        public Func<object> FactoryMethod
+        public Factory<object> FactoryMethod
         {
             get 
             {
@@ -49,7 +51,7 @@
                 {
                     this.factoryMethod = () =>
                     {
-                        List<object> dependenciesInstances = new List<object>();
+                        var dependenciesInstances = new List<object>();
                         foreach (var dependencyFactory in this.ConstructorDependenciesFactories)
                         {
                             dependenciesInstances.Add(dependencyFactory.Invoke());
@@ -60,7 +62,7 @@
                         foreach (var kvp in this.dependencyPropertiesFactories)
                         {
                             string propertyName = kvp.Key;
-                            Func<object> factory = kvp.Value;
+                            Factory<object> factory = kvp.Value;
                             instance.GetType().GetProperty(propertyName).SetValue(instance, factory(), null);
                         }
 
@@ -92,7 +94,7 @@
         /// <summary> Adds a factory to construct an instance of the property with the provided name..</summary>
         /// <param name="propertyName">The property's name.</param>
         /// <param name="factory">The factory to construct the property's instance.</param>
-        public void AddDependencyPropertyFactory(string propertyName, Func<object> factory)
+        public void AddDependencyPropertyFactory(string propertyName, Factory<object> factory)
         {
             this.dependencyPropertiesFactories[propertyName] = factory;
         }
@@ -100,7 +102,7 @@
         /// <summary> Gets the factory method to build the property with the provided name.</summary>
         /// <param name="propertyName">The property's name.</param>
         /// <returns>The factory method.</returns>
-        public Func<object> GetDependencyPropertyFactory(string propertyName)
+        public Factory<object> GetDependencyPropertyFactory(string propertyName)
         {
             return this.dependencyPropertiesFactories[propertyName];
         }
